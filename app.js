@@ -14,7 +14,8 @@ const { sequelize } =  require('./models');
 const passportConfig = require('./passport');
 
 const app = express();
-sequelize.sync();
+sequelize.sync({ force: true });
+// sequelize.sync();
 passportConfig(passport);
 
 app.set('views', path.join(__dirname, 'views'));
@@ -29,7 +30,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(session({
     resave: false,
     saveUninitialized: false,
-    recret: 'nodebirdsecret',
+    recret: 'process.env.COOKIE_SECRET',
     cookie: {
         httpOnly: true,
         secure: false

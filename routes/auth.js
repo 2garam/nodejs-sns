@@ -6,6 +6,7 @@ const { User } = require("../models");
 
 const router = express.Router();
 
+//해당 홈페이지에서 직접 가입, 로그인, 로그아웃 했을 때
 router.post('/join', isNotLoggedIn, async (req, res, next) => {
     const { email, nick, password } = req.body;
 
@@ -53,5 +54,19 @@ router.get('/logout', isLoggedIn, (req, res) => {
     req.session.destroy();
     res.redirect("/");
 });
+
+
+//kakao로 사용했을 때
+router.get("/kakao", passport.authenticate("kakao"));
+
+router.get(
+    "/kakao/callback",
+    passport.authenticate('kakao', {
+    failureRedirect: '/'
+}),
+    (req, res) => {
+        res.redirect("/");
+    }
+);
 
 module.exports = router;
